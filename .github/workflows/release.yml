@@ -1,0 +1,55 @@
+name: Publish Release
+
+on:
+  release:
+    types:
+      - released
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build
+        run: cargo build --all-features
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Test
+        run: cargo test --all-features
+
+  format_and_lint:
+    name: Format and Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Format
+        run: cargo fmt --all -- --check
+      - name: Lint
+        run: cargo clippy --all-features -- -D warnings
+
+  publish:
+    name: Publish
+    needs: [build, test, format_and_lint]
+    runs-on: ubuntu-latest
+    environment:
+      name: Deployment on crates.io
+      url: https://crates.io/crates/cazan-utils
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Publish
+        run: cargo publish --all-features --dry-run
+        env:
+          CRATES_IO_TOKEN: ${{ secrets.CAZAN_CRATES_IO_TOKEN }}
