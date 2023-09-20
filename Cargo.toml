@@ -1,0 +1,11 @@
+[package]
+name = "cazan-utils"
+version = "0.0.0"
+edition = "2021"
+description = "A cargo crate containing all the tools common to CLI and WASM"
+authors = ["Sellig6792 <sellig6792@gmail.com>"]
+license-file = "LICENSE"
+repository = "https://github.com/AeliaDev/cazan-utils"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
