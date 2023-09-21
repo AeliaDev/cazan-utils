@@ -16,3 +16,4 @@ points_export = ["points"]
 [dependencies]
 mint = { version = "0.5.9", optional = true }
 serde_json = { version = "1.0.107", optional = true }
+either = "1.9.0"
