@@ -8,4 +8,11 @@ license-file = "LICENSE"
 repository = "https://github.com/AeliaDev/cazan-utils"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[features]
+points = ["mint", "serde_json"]
+points_import = ["points"]
+points_export = ["points"]
+
 [dependencies]
+mint = { version = "0.5.9", optional = true }
+serde_json = { version = "1.0.107", optional = true }
