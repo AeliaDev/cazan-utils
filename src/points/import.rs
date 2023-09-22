@@ -30,9 +30,13 @@ impl Point {
     #[cfg(feature = "points_import")]
     pub fn import(image_path: Option<&str>) -> Either<Vec<Self>, HashMap<String, Vec<Self>>> {
         const ERROR_MESSAGE: &str = "Failed to parse .cazan/build/assets.json file";
-        let path = Path::new(".cazan/build/assets.json");
+
+        #[cfg(test)] let path = Path::new(".cazan/build/assets.json.import-test");
+        #[cfg(not(test))] let path = Path::new(".cazan/build/assets.json");
+
 
         let json = fs::read_to_string(path).expect(ERROR_MESSAGE);
+        println!("{}", json);
         let json = serde_json::from_str::<serde_json::Value>(&json).expect(ERROR_MESSAGE);
 
         match image_path {
@@ -117,5 +121,78 @@ impl Point {
                     as usize,
             })
             .collect::<Vec<Self>>()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::fs;
+    use serial_test::serial;
+
+    use super::Point;
+
+    #[test]
+    #[serial]
+    fn test_from_json() {
+        fs::write(".cazan/build/assets.json.import-test", r#"[
+    {
+        "path": "assets/test.png",
+        "points": [ {"x": 0, "y": 0, "n": 0}, {"x": 1, "y": 1, "n": 1}, {"x": 2, "y": 2, "n": 2}, {"x": 4, "y": 4, "n": 3} ]
+    }
+]"#).expect("Failed to create .cazan/build/assets.json file");
+
+        let points = Point::import(Some("assets/test.png")).left().unwrap();
+
+        assert_eq!(points.len(), 4);
+        assert_eq!(points[0].x(), 0);
+        assert_eq!(points[0].y(), 0);
+        assert_eq!(points[0].n, 0);
+        assert_eq!(points[1].x(), 1);
+        assert_eq!(points[1].y(), 1);
+        assert_eq!(points[1].n, 1);
+        assert_eq!(points[2].x(), 2);
+        assert_eq!(points[2].y(), 2);
+        assert_eq!(points[2].n, 2);
+        assert_eq!(points[3].x(), 4);
+        assert_eq!(points[3].y(), 4);
+        assert_eq!(points[3].n, 3);
+
+        fs::write(".cazan/build/assets.json.import-test", "[]").unwrap();
+    }
+
+    #[test]
+    #[serial]
+    fn test_from_json_all() {
+
+        fs::write(".cazan/build/assets.json.import-test", r#"[
+    {
+        "path": "assets/test.png",
+        "points": [ {"x": 0, "y": 0, "n": 0}, {"x": 1, "y": 1, "n": 1}, {"x": 2, "y": 2, "n": 2}, {"x": 4, "y": 4, "n": 3} ]
+    }
+]"#).expect("Failed to create .cazan/build/assets.json file");
+        let images_points = Point::import(None).right().unwrap();
+
+        assert_eq!(images_points.len(), 1);
+        assert_eq!(images_points["assets/test.png"].len(), 4);
+        assert_eq!(images_points["assets/test.png"][0].x(), 0);
+        assert_eq!(images_points["assets/test.png"][0].y(), 0);
+        assert_eq!(images_points["assets/test.png"][0].n, 0);
+        assert_eq!(images_points["assets/test.png"][1].x(), 1);
+        assert_eq!(images_points["assets/test.png"][1].y(), 1);
+        assert_eq!(images_points["assets/test.png"][1].n, 1);
+        assert_eq!(images_points["assets/test.png"][2].x(), 2);
+        assert_eq!(images_points["assets/test.png"][2].y(), 2);
+        assert_eq!(images_points["assets/test.png"][2].n, 2);
+        assert_eq!(images_points["assets/test.png"][3].x(), 4);
+        assert_eq!(images_points["assets/test.png"][3].y(), 4);
+        assert_eq!(images_points["assets/test.png"][3].n, 3);
+
+        fs::write(".cazan/build/assets.json.import-test", "[]").unwrap();
+    }
+
+    #[test]
+    #[should_panic(expected = "Failed to parse .cazan/build/assets.json file")]
+    fn test_from_non_existent_json() {
+        let points = Point::import(Some("nonexistent/file/path"));
     }
 }

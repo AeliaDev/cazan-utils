@@ -13,6 +13,9 @@ points = ["mint", "serde_json"]
 points_import = ["points"]
 points_export = ["points"]
 
+[dev-dependencies]
+serial_test = "2.0.0"
+
 [dependencies]
 mint = { version = "0.5.9", optional = true }
 serde_json = { version = "1.0.107", optional = true }

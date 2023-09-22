@@ -1,10 +1,10 @@
 #![allow(dead_code)]
 
-#[cfg(test)]
-mod tests;
-
 #[cfg(feature = "points_import")]
 mod import;
+
+#[cfg(feature = "points_export")]
+mod export;
 
 /// Struct Point for keeping additional information
 /// along with a 2D coordinate.
@@ -12,13 +12,39 @@ mod import;
 /// # Fields
 ///
 /// * `n` - The number of the point.
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Point {
     point: mint::Point2<u32>,
     pub n: usize,
 }
 
 impl Point {
+    /// Creates a new [`Point`] instance.
+    ///
+    /// # Parameters
+    ///
+    /// * `x` - The x-coordinate of the point.
+    /// * `y` - The y-coordinate of the point.
+    /// * `n` - The number of the point.
+    ///
+    /// # Returns
+    ///
+    /// * A new [`Point`] instance.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use cazan_utils::points::Point;
+    ///
+    /// let point = Point::new(0, 0, 0);
+    /// ```
+    pub fn new(x: u32, y: u32, n: usize) -> Self {
+        Self {
+            point: mint::Point2 { x, y },
+            n,
+        }
+    }
+
     /// Returns the x-coordinate of this point.
     ///
     /// # Returns
