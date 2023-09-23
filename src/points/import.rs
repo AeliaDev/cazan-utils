@@ -31,12 +31,12 @@ impl Point {
     pub fn import(image_path: Option<&str>) -> Either<Vec<Self>, HashMap<String, Vec<Self>>> {
         const ERROR_MESSAGE: &str = "Failed to parse .cazan/build/assets.json file";
 
-        #[cfg(test)] let path = Path::new(".cazan/build/assets.json.import-test");
-        #[cfg(not(test))] let path = Path::new(".cazan/build/assets.json");
-
+        #[cfg(test)]
+        let path = Path::new(".cazan/build/assets.json.import-test");
+        #[cfg(not(test))]
+        let path = Path::new(".cazan/build/assets.json");
 
         let json = fs::read_to_string(path).expect(ERROR_MESSAGE);
-        println!("{}", json);
         let json = serde_json::from_str::<serde_json::Value>(&json).expect(ERROR_MESSAGE);
 
         match image_path {
@@ -126,8 +126,8 @@ impl Point {
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
     use serial_test::serial;
+    use std::fs;
 
     use super::Point;
 
@@ -163,7 +163,6 @@ mod tests {
     #[test]
     #[serial]
     fn test_from_json_all() {
-
         fs::write(".cazan/build/assets.json.import-test", r#"[
     {
         "path": "assets/test.png",
@@ -193,6 +192,6 @@ mod tests {
     #[test]
     #[should_panic(expected = "Failed to parse .cazan/build/assets.json file")]
     fn test_from_non_existent_json() {
-        let points = Point::import(Some("nonexistent/file/path"));
+        Point::import(Some("nonexistent/file/path"));
     }
 }

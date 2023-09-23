@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 use std::fs;
 
-
 use super::Point;
 
 const ASSETS_JSON_PATH: &str = ".cazan/build/assets.json";
@@ -27,7 +26,9 @@ impl Point {
         json.push_str("[\n");
 
         for (image_path, points) in images_points {
-            json.push_str(&Self::add_4_spaces_before_each_line(Self::serialize(image_path, points)?));
+            json.push_str(&Self::add_4_spaces_before_each_line(Self::serialize(
+                image_path, points,
+            )?));
             json.push_str(",\n");
         }
         // Remove the last comma
@@ -36,9 +37,8 @@ impl Point {
 
         json.push_str("\n]");
 
-
-        fs::write(".cazan/build/assets.json", json).map_err(|_| "Failed to write to .cazan/build/assets.json file".to_string())?;
-
+        fs::write(".cazan/build/assets.json", json)
+            .map_err(|_| "Failed to write to .cazan/build/assets.json file".to_string())?;
 
         Ok(())
     }
@@ -62,17 +62,11 @@ impl Point {
     /// * If the JSON serialization fails.
     /// * If the file writing fails.
     pub fn export(image_path: String, points: Vec<Self>) -> Result<(), String> {
-        let mut json = String::new();
-        // This one doesn't erase the previous content of the file
-
-
-        // Read the file
-
-        json = fs::read_to_string(".cazan/build/assets.json").map_err(|e| e.to_string())?;
+        let mut json = fs::read_to_string(".cazan/build/assets.json").map_err(|e| e.to_string())?;
 
         // Remove the last ']'
         json.pop(); // Remove the last ']
-        // Remove the last '\n'
+                    // Remove the last '\n'
         if json.pop().unwrap() == '[' {
             // If the file is empty
             json.push_str("[\n");
@@ -80,13 +74,14 @@ impl Point {
             json.push_str(",\n");
         }
 
-        json.push_str(&Self::add_4_spaces_before_each_line(Self::serialize(image_path, points)?));
+        json.push_str(&Self::add_4_spaces_before_each_line(Self::serialize(
+            image_path, points,
+        )?));
 
         json.push_str("\n]");
 
-
-        fs::write(".cazan/build/assets.json", json).map_err(|_| "Failed to write to .cazan/build/assets.json file".to_string())?;
-
+        fs::write(".cazan/build/assets.json", json)
+            .map_err(|_| "Failed to write to .cazan/build/assets.json file".to_string())?;
 
         Ok(())
     }
@@ -124,8 +119,6 @@ impl Point {
 
         json.push_str("]\n}");
 
-        println!("{}", json);
-
         Ok(json)
     }
 
@@ -137,12 +130,11 @@ impl Point {
 
 #[cfg(test)]
 mod tests {
+    use serial_test::serial;
     use std::collections::HashMap;
     use std::fs;
-    use serial_test::serial;
 
     use super::Point;
-
 
     #[test]
     fn test_serialize() {
