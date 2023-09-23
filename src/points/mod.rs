@@ -62,4 +62,13 @@ impl Point {
     pub fn y(&self) -> u32 {
         self.point.y
     }
+
+    /// Gets the [`mint::Point2`] instance of this [`Point`].
+    ///
+    /// # Returns
+    ///
+    /// * The [`mint::Point2`] instance of this [`Point`].
+    pub fn point(&self) -> mint::Point2<u32> {
+        self.point
+    }
 }
