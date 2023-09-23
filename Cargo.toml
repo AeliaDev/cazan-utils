@@ -1,6 +1,6 @@
 [package]
 name = "cazan-utils"
-version = "0.0.0"
+version = "0.0.1"
 edition = "2021"
 description = "A cargo crate containing all the tools common to CLI and WASM"
 authors = ["Sellig6792 <sellig6792@gmail.com>"]
