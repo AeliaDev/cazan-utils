@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - name: Setup .cazan directorygt
+      - name: Setup .cazan directory
         run: |
           mkdir -p .cazan/build
           echo "[]" > .cazan/build/assets.json
@@ -38,6 +38,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
       - name: Format
         run: cargo fmt --all -- --check
       - name: Lint
