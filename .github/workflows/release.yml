@@ -23,6 +23,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+      - name: Setup .cazan directorygt
+        run: |
+          mkdir .cazan/build
+          echo "[]" > .cazan/build/assets.json
+          echo "[]" > .cazan/build/assets.json.import-test
       - name: Test
         run: cargo test --all-features
 
