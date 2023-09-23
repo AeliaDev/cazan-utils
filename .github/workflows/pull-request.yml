@@ -25,7 +25,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: Setup .cazan directory
         run: |
-          mkdir .cazan/build
+          mkdir -p .cazan/build
           echo "[]" > .cazan/build/assets.json
           echo "[]" > .cazan/build/assets.json.import-test
       - name: Test
