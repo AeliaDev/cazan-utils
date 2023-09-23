@@ -56,7 +56,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+      - name: Package
+        run: cargo package --all-features
       - name: Publish
-        run: cargo publish --all-features --dry-run
+        run: cargo publish --all-features
         env:
           CRATES_IO_TOKEN: ${{ secrets.CAZAN_CRATES_IO_TOKEN }}
