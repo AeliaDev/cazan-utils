@@ -124,7 +124,7 @@ impl Point {
 
     fn add_4_spaces_before_each_line(mut json: String) -> String {
         json.insert_str(0, "    ");
-        json.replace("\n", "\n    ")
+        json.replace('\n', "\n    ")
     }
 }
 

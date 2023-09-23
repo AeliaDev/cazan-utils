@@ -42,7 +42,7 @@ impl Point {
         match image_path {
             Some(path) => {
                 let image = Self::get_image_from_json(&json, path);
-                Either::Left(Self::extract_points(&image))
+                Either::Left(Self::extract_points(image))
             }
             None => {
                 let mut images_points_map = HashMap::new();
