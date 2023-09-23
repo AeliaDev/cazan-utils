@@ -64,9 +64,17 @@ impl Point {
     pub fn export(image_path: String, points: Vec<Self>) -> Result<(), String> {
         let mut json = fs::read_to_string(".cazan/build/assets.json").map_err(|e| e.to_string())?;
 
-        // Remove the last ']'
-        json.pop(); // Remove the last ']
-                    // Remove the last '\n'
+        // if !json.ends_with(']') {
+        //     println!("{}", json.replace('\n', "\\n"));
+        //     return Err("Expected the string to end with ']'".parse().unwrap());
+        // }
+        // json.pop(); // Remove the last ']'
+
+        println!("{}", json.replace('\n', "\\n"));
+        if json.pop().unwrap() == '\n' {
+            json.pop();
+        }
+
         if json.pop().unwrap() == '[' {
             // If the file is empty
             json.push_str("[\n");
